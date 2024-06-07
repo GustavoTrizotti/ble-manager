@@ -22,7 +22,6 @@ export function DevicesProvider({
     status: false,
   });
   const [isScanning, setIsScanning] = useState(false);
-
   const [peripherals, setPeripherals] = useState<
     Map<Peripheral['id'], Peripheral>
   >(new Map());

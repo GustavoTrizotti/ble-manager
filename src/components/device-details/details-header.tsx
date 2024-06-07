@@ -3,21 +3,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StyleSheet, ToastAndroid, TouchableOpacity } from 'react-native';
 import { Text, View } from '../utils/themed';
-import { useEffect, useState } from 'react';
 
-export function DetailsHeader({ peripheralId }: { peripheralId: string }) {
+export function DetailsHeader() {
   const { connectedPeripheral, connectDevice, isConnecting, disconnectDevice } =
     useDevices();
   const { id, name } = connectedPeripheral || {};
-  const [isConnected, setIsConnected] = useState(false);
-
-  useEffect(() => {
-    if (connectedPeripheral) {
-      setIsConnected(true);
-    } else {
-      setIsConnected(false);
-    }
-  }, [connectedPeripheral]);
+  const isConnected = connectedPeripheral ? true : false;
 
   if (isConnecting.status) {
     return (
@@ -27,9 +18,10 @@ export function DetailsHeader({ peripheralId }: { peripheralId: string }) {
     );
   }
 
-  function goBack() {
-    router.dismissAll();
-    router.push('/devices');
+  async function goBack() {
+    router.back();
+    await disconnectDevice();
+    ToastAndroid.show('Dispositivo desconectado.', ToastAndroid.SHORT);
   }
 
   return (
@@ -44,7 +36,7 @@ export function DetailsHeader({ peripheralId }: { peripheralId: string }) {
       <TouchableOpacity
         onPress={async () => {
           if (!isConnected) {
-            await connectDevice(peripheralId);
+            await connectDevice(connectedPeripheral?.id as string);
           } else {
             await disconnectDevice();
             ToastAndroid.show('Dispositivo desconectado.', ToastAndroid.SHORT);

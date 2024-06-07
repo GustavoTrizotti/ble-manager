@@ -1,10 +1,10 @@
+import { useDevices } from '@/src/context/devices.context';
 import { ListRenderItemInfo } from '@shopify/flash-list';
-import { router, usePathname } from 'expo-router';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { Peripheral } from 'react-native-ble-manager';
 import { Text, View } from '../utils/themed';
-import { useDevices } from '@/src/context/devices.context';
-import { useEffect } from 'react';
 
 export function DeviceListItem({
   device,
@@ -13,17 +13,10 @@ export function DeviceListItem({
 }) {
   const { connectDevice, isConnecting, connectedPeripheral } = useDevices();
   const { id, rssi, name } = device.item;
-  const pathname = usePathname();
 
   useEffect(() => {
-    if (connectedPeripheral && pathname === '/devices') {
-      router.push({
-        pathname: '/device_details',
-        params: {
-          id: 1,
-          peripheralId: connectedPeripheral.id,
-        },
-      });
+    if (connectedPeripheral) {
+      router.push('/device_details');
     }
   }, [connectedPeripheral]);
 
