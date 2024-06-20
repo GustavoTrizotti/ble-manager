@@ -1,24 +1,21 @@
 import { useDevices } from '@/src/context/devices.context';
 import { ListRenderItemInfo } from '@shopify/flash-list';
-import { router } from 'expo-router';
-import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Peripheral } from 'react-native-ble-manager';
-import { Text, View } from '../utils/themed';
 
 export function DeviceListItem({
   device,
 }: {
   device: ListRenderItemInfo<Peripheral>;
 }) {
-  const { connectDevice, isConnecting, connectedPeripheral } = useDevices();
+  const { connectDevice, isConnecting } = useDevices();
   const { id, rssi, name } = device.item;
-
-  useEffect(() => {
-    if (connectedPeripheral) {
-      router.push('/device_details');
-    }
-  }, [connectedPeripheral]);
 
   return (
     <View style={container}>

@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Text } from '../components/utils/themed';
+import { Text } from 'react-native';
 import { useBluetooth } from '../context/bluetooth.context';
 import { useDevices } from '../context/devices.context';
 import { useCustomCamera } from '../context/camera.context';
 import { Camera } from '../components/utils/camera';
+import { SettingsButton } from '../components/settings/settings-button';
 
 export default function Home() {
   const { startScan, isScanning } = useDevices();
@@ -24,6 +25,7 @@ export default function Home() {
 
   return (
     <SafeAreaView style={container}>
+      <SettingsButton />
       <View style={titleContainer}>
         <Text style={title}>Native BLE</Text>
         <Text style={subtitle}>Bluetooth Low Energy</Text>
@@ -75,10 +77,12 @@ const { container, titleContainer, title, subtitle, button, textButton } =
     title: {
       fontSize: 32,
       fontWeight: 'bold',
+      color: '#000',
     },
     subtitle: {
       fontSize: 22,
       fontWeight: 'normal',
+      color: '#000',
       opacity: 0.5,
     },
     button: {

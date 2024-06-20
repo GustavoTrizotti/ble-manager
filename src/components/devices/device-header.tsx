@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet } from 'react-native';
-import { Text, View } from '../utils/themed';
+import { Text, View } from 'react-native';
 import { useDevices } from '@/src/context/devices.context';
 
 interface DeviceHeaderProps {

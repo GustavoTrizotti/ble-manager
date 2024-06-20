@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { CheckDevice } from './check_device';
-import { Text, View } from './themed';
+import { Text, View } from 'react-native';
 
 export function Camera() {
   const { closeCamera } = useCustomCamera();
@@ -29,11 +29,16 @@ export function Camera() {
 
   if (!permission.granted) {
     return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>
-          We need your permission to show the camera
+      <View style={styles.accessContainer}>
+        <Text style={{ textAlign: 'center', ...styles.accessTitle }}>
+          Permita que o aplicativo acesse a câmera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <TouchableOpacity
+          onPress={requestPermission}
+          style={styles.accessButton}
+        >
+          <Text style={styles.accessText}>Permitir</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -93,6 +98,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  accessContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
   camera: {
     flex: 1,
     alignItems: 'center',
@@ -106,6 +117,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     paddingTop: '10%',
+  },
+  accessButton: {
+    backgroundColor: '#FFF',
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  accessTitle: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  accessText: {
+    color: '#111',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#555',

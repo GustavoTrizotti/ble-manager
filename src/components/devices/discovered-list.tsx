@@ -1,13 +1,26 @@
 import { Ionicons } from '@expo/vector-icons';
 import { FlashList } from '@shopify/flash-list';
 import { StyleSheet } from 'react-native';
-import { Text, View } from '../utils/themed';
+import { Text, View } from 'react-native';
 import { DeviceHeader } from './device-header';
 import { DeviceListItem } from './device-list-item';
 import { useDevices } from '@/src/context/devices.context';
+import { useEffect } from 'react';
+import { router } from 'expo-router';
 
 export function DiscoveredDeviceList() {
-  const { peripherals } = useDevices();
+  const { peripherals, connectedPeripheral } = useDevices();
+
+  useEffect(() => {
+    if (connectedPeripheral) {
+      router.push({
+        pathname: '/device_details',
+        params: {
+          peripheralId: connectedPeripheral.id,
+        },
+      });
+    }
+  }, [connectedPeripheral]);
 
   return (
     <View style={styles.container}>

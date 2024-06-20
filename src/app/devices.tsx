@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DeviceList } from '../components/devices/device-list';
-import { Text, View } from '../components/utils/themed';
+import { Text, View } from 'react-native';
 import { useDevices } from '../context/devices.context';
 
 export default function Devices() {

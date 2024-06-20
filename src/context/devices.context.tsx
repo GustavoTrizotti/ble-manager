@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { DevicesContextProps } from '../types/devices.types';
-import { Peripheral } from 'react-native-ble-manager';
-import { NativeEventEmitter, NativeModules, ToastAndroid } from 'react-native';
-import BleManager from 'react-native-ble-manager';
+import { createContext, useContext, useEffect, useState } from "react";
+import { DevicesContextProps } from "../types/devices.types";
+import { Peripheral } from "react-native-ble-manager";
+import { NativeEventEmitter, NativeModules, ToastAndroid } from "react-native";
+import { setAdapterName } from "react-native-bluetooth-serial-next";
+import BleManager from "react-native-ble-manager";
 
 const DevicesContext = createContext<DevicesContextProps | null>(null);
 const bleManagerModule = NativeModules.BleManager;
@@ -23,7 +24,7 @@ export function DevicesProvider({
   });
   const [isScanning, setIsScanning] = useState(false);
   const [peripherals, setPeripherals] = useState<
-    Map<Peripheral['id'], Peripheral>
+    Map<Peripheral["id"], Peripheral>
   >(new Map());
   const [connectedPeripheral, setConnectedPeripheral] =
     useState<Peripheral | null>(null);
@@ -32,7 +33,7 @@ export function DevicesProvider({
     BleManager.start();
 
     bleManagerEmitter.addListener(
-      'BleManagerDiscoverPeripheral',
+      "BleManagerDiscoverPeripheral",
       (peripheral: Peripheral) => {
         if (peripheral.advertising.isConnectable && peripheral.name) {
           setPeripherals(
@@ -43,22 +44,22 @@ export function DevicesProvider({
     );
 
     bleManagerEmitter.addListener(
-      'BleManagerConnectPeripheral',
+      "BleManagerConnectPeripheral",
       (peripheral: Peripheral) => {
         setConnectedPeripheral(peripheral);
       }
     );
 
     bleManagerEmitter.addListener(
-      'BleManagerDisconnectPeripheral',
+      "BleManagerDisconnectPeripheral",
       (peripheral) => {
         if (peripheral) setConnectedPeripheral(null);
       }
     );
 
-    bleManagerEmitter.addListener('BleManagerStopScan', () => {
+    bleManagerEmitter.addListener("BleManagerStopScan", () => {
       setIsScanning(false);
-      ToastAndroid.show('Scanning stopped...', ToastAndroid.SHORT);
+      ToastAndroid.show("Scanning stopped...", ToastAndroid.SHORT);
     });
   }
 
@@ -68,12 +69,12 @@ export function DevicesProvider({
     BleManager.scan([], 5, true)
       .then(async () => {
         setIsScanning(true);
-        ToastAndroid.show('Scanning started...', ToastAndroid.SHORT);
+        ToastAndroid.show("Scanning started...", ToastAndroid.SHORT);
       })
       .catch((error) => console.error(error));
   }
 
-  async function connectDevice(id: Peripheral['id']) {
+  async function connectDevice(id: Peripheral["id"]) {
     setIsConnecting({ peripheralId: id, status: true });
     let connected = false;
     await BleManager.connect(id)
@@ -81,7 +82,7 @@ export function DevicesProvider({
         await BleManager.retrieveServices(id)
           .then((peripheral: Peripheral) => {
             ToastAndroid.showWithGravity(
-              'Device connected successfully!',
+              "Device connected successfully!",
               ToastAndroid.SHORT,
               10
             );
@@ -117,6 +118,14 @@ export function DevicesProvider({
     }
   }
 
+  async function changeName(newName: string) {
+    try {
+      return "New Name";
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   function stopScan() {
     BleManager.stopScan()
       .then(() => {
@@ -129,13 +138,13 @@ export function DevicesProvider({
     init();
 
     return () => {
-      bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
-      bleManagerEmitter.removeAllListeners('BleManagerConnectPeripheral');
-      bleManagerEmitter.removeAllListeners('BleManagerDisconnectPeripheral');
+      bleManagerEmitter.removeAllListeners("BleManagerDiscoverPeripheral");
+      bleManagerEmitter.removeAllListeners("BleManagerConnectPeripheral");
+      bleManagerEmitter.removeAllListeners("BleManagerDisconnectPeripheral");
       bleManagerEmitter.removeAllListeners(
-        'BleManagerDidUpdateValueForCharacteristic'
+        "BleManagerDidUpdateValueForCharacteristic"
       );
-      bleManagerEmitter.removeAllListeners('BleManagerStopScan');
+      bleManagerEmitter.removeAllListeners("BleManagerStopScan");
     };
   }, []);
 
@@ -148,6 +157,7 @@ export function DevicesProvider({
         connectedPeripheral,
         startScan,
         stopScan,
+        changeName,
         connectDevice,
         disconnectDevice,
         readCharacteristic,

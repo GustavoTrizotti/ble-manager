@@ -1,14 +1,43 @@
+import { useConnection } from '@/src/context/connection.context';
 import { useDevices } from '@/src/context/devices.context';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { StyleSheet, ToastAndroid, TouchableOpacity } from 'react-native';
-import { Text, View } from '../utils/themed';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { PeripheralInfo } from 'react-native-ble-manager';
 
 export function DetailsHeader() {
   const { connectedPeripheral, connectDevice, isConnecting, disconnectDevice } =
     useDevices();
+  const { data, writeToCharacteristic } = useConnection();
   const { id, name } = connectedPeripheral || {};
   const isConnected = connectedPeripheral ? true : false;
+  const { peripheralId } = useLocalSearchParams();
+  const [battery, setBattery] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!battery && connectedPeripheral) {
+      (async () =>
+        await writeToCharacteristic(
+          (connectedPeripheral as PeripheralInfo).id,
+          'ffe0',
+          'ffe1',
+          'b'
+        ))();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setBattery(parseInt(data[0].message));
+    }
+  }, [data]);
 
   if (isConnecting.status) {
     return (
@@ -30,13 +59,30 @@ export function DetailsHeader() {
         <Ionicons name="arrow-back" color="#FFF" size={24} />
       </TouchableOpacity>
       <View style={headerInfoContainer}>
-        <Text style={headerTitle}>{name || 'Dispositivo não encontrado.'}</Text>
-        <Text style={headerSubtitle}>{id || 'Sem dispositivo...'}</Text>
+        <Text style={headerTitle}>{name || 'Dispositivo ausente.'}</Text>
+        <Text style={headerSubtitle}>
+          {id || 'Sem dispositivo conectado...'}
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 4,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Text style={headerSubtitle}>{battery || '00'}%</Text>
+        <MaterialCommunityIcons name="battery" color="#FFF" size={20} />
       </View>
       <TouchableOpacity
         onPress={async () => {
           if (!isConnected) {
-            await connectDevice(connectedPeripheral?.id as string);
+            if (connectedPeripheral?.id) {
+              await connectDevice(connectedPeripheral?.id as string);
+            } else {
+              await connectDevice(peripheralId as string);
+            }
           } else {
             await disconnectDevice();
             ToastAndroid.show('Dispositivo desconectado.', ToastAndroid.SHORT);

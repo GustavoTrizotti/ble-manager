@@ -2,9 +2,8 @@ import { useConnection } from '@/src/context/connection.context';
 import { useDevices } from '@/src/context/devices.context';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { PeripheralInfo } from 'react-native-ble-manager';
-import { View } from '../utils/themed';
 
 export function DetailsInput() {
   const { connectedPeripheral } = useDevices();

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { View } from '../utils/themed';
+import { View } from 'react-native';
 import { DiscoveredDeviceList } from './discovered-list';
 
 export function DeviceList() {

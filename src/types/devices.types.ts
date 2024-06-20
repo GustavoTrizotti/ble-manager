@@ -8,6 +8,7 @@ export interface DevicesContextProps {
 
   startScan(): void;
   stopScan(): void;
+  changeName(newName: string): void;
   connectDevice(id: Peripheral['id']): Promise<boolean>;
   disconnectDevice(): Promise<void>;
   readCharacteristic(service: string, characteristic: string): void;

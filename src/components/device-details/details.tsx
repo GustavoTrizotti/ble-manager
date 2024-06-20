@@ -2,7 +2,7 @@ import { useConnection } from '@/src/context/connection.context';
 import { FlashList } from '@shopify/flash-list';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { Text, View } from '../utils/themed';
+import { Text, View } from 'react-native';
 
 export function Details() {
   const { data, clearLog } = useConnection();

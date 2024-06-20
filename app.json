@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "native-ble",
+    "name": "Native BLE",
     "slug": "native-ble",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -30,7 +30,7 @@
         "android.permission.BLUETOOTH_CONNECT",
         "android.permission.BLUETOOTH_ADVERTISE"
       ],
-      "versionCode": 7
+      "versionCode": 8
     },
     "web": {
       "bundler": "metro",

@@ -1,16 +1,16 @@
+import { useDevices } from '@/src/context/devices.context';
 import { MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
   Pressable,
   StyleSheet,
-  TouchableOpacity,
+  Text,
+  View,
 } from 'react-native';
-import { Text, View } from './themed';
-import { useDevices } from '@/src/context/devices.context';
-import { useEffect, useState } from 'react';
 import { Peripheral } from 'react-native-ble-manager';
-import { router } from 'expo-router';
 
 interface CheckDeviceProps {
   isVisible: boolean;
@@ -77,7 +77,12 @@ export function CheckDevice({
           success = await connectQR(peripheralScanned.id).then((res) => res);
         }
         clearData();
-        router.push('/device_details');
+        router.push({
+          pathname: '/device_details',
+          params: {
+            peripheralId: peripheralScanned.id,
+          },
+        });
       })();
     }
   }, [peripheralScanned]);
