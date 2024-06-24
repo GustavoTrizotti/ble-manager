@@ -1,18 +1,18 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 import {
   ActivityIndicator,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { Text } from 'react-native';
-import { useBluetooth } from '../context/bluetooth.context';
-import { useDevices } from '../context/devices.context';
-import { useCustomCamera } from '../context/camera.context';
-import { Camera } from '../components/utils/camera';
-import { SettingsButton } from '../components/settings/settings-button';
+} from "react-native";
+import { Text } from "react-native";
+import { useBluetooth } from "../context/bluetooth.context";
+import { useDevices } from "../context/devices.context";
+import { useCustomCamera } from "../context/camera.context";
+import { Camera } from "../components/utils/camera";
+import { SettingsButton } from "../components/settings/settings-button";
 
 export default function Home() {
   const { startScan, isScanning } = useDevices();
@@ -46,7 +46,7 @@ export default function Home() {
         style={button}
         onPress={async () => {
           startScan();
-          router.push('/devices');
+          router.push("/devices");
         }}
         disabled={isScanning || !isBluetoothEnabled}
       >
@@ -64,42 +64,42 @@ const { container, titleContainer, title, subtitle, button, textButton } =
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFF',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: "#FFF",
+      justifyContent: "center",
+      alignItems: "center",
       gap: 24,
     },
     titleContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       gap: 6,
     },
     title: {
       fontSize: 32,
-      fontWeight: 'bold',
-      color: '#000',
+      fontWeight: "bold",
+      color: "#000",
     },
     subtitle: {
       fontSize: 22,
-      fontWeight: 'normal',
-      color: '#000',
+      fontWeight: "normal",
+      color: "#000",
       opacity: 0.5,
     },
     button: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: "flex",
+      flexDirection: "row",
       gap: 16,
       padding: 14,
-      backgroundColor: '#222',
+      backgroundColor: "#222",
       borderRadius: 4,
       marginTop: 4,
       elevation: 6,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
     textButton: {
-      color: '#FFF',
+      color: "#FFF",
       fontSize: 18,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });

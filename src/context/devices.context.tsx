@@ -2,8 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { DevicesContextProps } from "../types/devices.types";
 import { Peripheral } from "react-native-ble-manager";
 import { NativeEventEmitter, NativeModules, ToastAndroid } from "react-native";
-import { setAdapterName } from "react-native-bluetooth-serial-next";
 import BleManager from "react-native-ble-manager";
+
+import RNBluetoothClassic from "react-native-bluetooth-classic";
 
 const DevicesContext = createContext<DevicesContextProps | null>(null);
 const bleManagerModule = NativeModules.BleManager;
@@ -118,12 +119,11 @@ export function DevicesProvider({
     }
   }
 
-  async function changeName(newName: string) {
-    try {
-      return "New Name";
-    } catch (error) {
-      console.error(error);
-    }
+  async function changeName(newName: string): Promise<boolean> {
+    return RNBluetoothClassic.setBluetoothAdapterName(newName).catch((err) => {
+      console.error(err);
+      throw new Error(err);
+    });
   }
 
   function stopScan() {
